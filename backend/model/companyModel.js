@@ -16,6 +16,10 @@ const companySchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    nutralCount: {
+      type: Number,
+      default: 0,
+    },
     totalReviews: {
       type: Number,
       default: 0,

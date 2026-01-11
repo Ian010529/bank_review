@@ -5,6 +5,8 @@ const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
 const globalErrorHandler = require("./controllers/errorController");
+const AppError = require("./utils/appError");
+const companyRouter = require("./routes/companyRoutes");
 
 const app = express();
 
@@ -48,6 +50,10 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use("/api/v1/companies", companyRouter);
+
+// localhost:8000/api/v1/companies/all
 
 app.get("/", (req, res) => {
   res.status(200).json({
