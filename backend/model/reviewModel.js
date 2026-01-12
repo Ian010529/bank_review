@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
-import { AnyObject } from "./../node_modules/mongoose/types/index.d";
-const companyModel = require("./companyModel");
 
 const storySchema = new mongoose.Schema(
   {
     vibe: {
       type: String,
-      ennum: ["positive", "negative", "neutral"],
+      enum: ["positive", "negative", "neutral"],
       required: true,
     },
 
@@ -15,7 +13,7 @@ const storySchema = new mongoose.Schema(
       required: true,
     },
 
-    isAnomymous: {
+    isAnonymous: {
       type: Boolean,
       default: false,
     },
@@ -23,28 +21,28 @@ const storySchema = new mongoose.Schema(
     name: {
       type: String,
       required: function () {
-        return !this.isAnomymous;
+        return !this.isAnonymous;
       },
     },
 
     anonymousId: {
       type: String,
       required: function () {
-        return this.isAnomymous;
+        return this.isAnonymous;
       },
+    },
 
-      userType: {
-        type: String,
-        enum: [
-          "individual",
-          "bank employee",
-          "bussiness customer",
-          "former employee",
-          "investor",
-          "other",
-        ],
-        required: true,
-      },
+    userType: {
+      type: String,
+      enum: [
+        "individual",
+        "bank employee",
+        "bussiness customer",
+        "former employee",
+        "investor",
+        "other",
+      ],
+      required: true,
     },
 
     title: {
