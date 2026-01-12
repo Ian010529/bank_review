@@ -7,6 +7,8 @@ const mongoSanitize = require("express-mongo-sanitize");
 const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./utils/appError");
 const companyRouter = require("./routes/companyRoutes");
+const reviewRouter = require("./routes/reviewRoutes");
+
 
 const app = express();
 
@@ -52,6 +54,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/v1/companies", companyRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 // localhost:8000/api/v1/companies/all
 
