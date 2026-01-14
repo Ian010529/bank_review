@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const storySchema = new mongoose.Schema(
   {
     vibe: {
       type: String,
-      enum: ["positive", "negative", "neutral"],
+      enum: ['positive', 'negative', 'neutral'],
       required: true,
     },
 
@@ -35,12 +35,12 @@ const storySchema = new mongoose.Schema(
     userType: {
       type: String,
       enum: [
-        "individual",
-        "bank employee",
-        "bussiness customer",
-        "former employee",
-        "investor",
-        "other",
+        'individual',
+        'bank employee',
+        'bussiness customer',
+        'former employee',
+        'investor',
+        'other',
       ],
       required: true,
     },
@@ -58,4 +58,4 @@ const storySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Story", storySchema);
+module.exports = mongoose.model('Story', storySchema);

@@ -1,12 +1,12 @@
-const Company = require("../model/companyModel");
-const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
+const Company = require('../model/companyModel');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 exports.getAllCompanies = catchAsync(async (req, res, next) => {
   const companies = await Company.find().sort({ name: 1 });
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     results: companies.length,
     data: {
       companies,
@@ -41,7 +41,7 @@ exports.getAllCompaniesTotalStats = catchAsync(async (req, res, next) => {
   };
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       stats,
     },
@@ -49,16 +49,16 @@ exports.getAllCompaniesTotalStats = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllCompaniesAllStats = catchAsync(async (req, res, next) => {
-  const { sort, page = 1, limit = 10, search = "" } = req.query;
+  const { sort, page = 1, limit = 10, search = '' } = req.query;
   const pageNumber = parseInt(page);
   const limitNumber = parseInt(limit);
   const skip = (pageNumber - 1) * limitNumber;
 
   let getAllCompanies = await Company.find({
-    name: { $regex: search, $options: "i" },
+    name: { $regex: search, $options: 'i' },
   }).lean();
 
-  allCompanies = getAllCompanies.map((company) => {
+  const allCompanies = getAllCompanies.map((company) => {
     const { negativeCount, totalReviews } = company;
     const complaintRate =
       totalReviews === 0
@@ -68,16 +68,16 @@ exports.getAllCompaniesAllStats = catchAsync(async (req, res, next) => {
   });
 
   switch (sort) {
-    case "reviews_asc":
+    case 'reviews_asc':
       allCompanies.sort((a, b) => a.totalReviews - b.totalReviews);
       break;
-    case "reviews_desc":
+    case 'reviews_desc':
       allCompanies.sort((a, b) => b.totalReviews - a.totalReviews);
       break;
-    case "complaint_asc":
+    case 'complaint_asc':
       allCompanies.sort((a, b) => a.complaintRate - b.complaintRate);
       break;
-    case "complaint_desc":
+    case 'complaint_desc':
       allCompanies.sort((a, b) => b.complaintRate - a.complaintRate);
       break;
     default:
@@ -93,7 +93,7 @@ exports.getAllCompaniesAllStats = catchAsync(async (req, res, next) => {
   const paginatedCompanies = allCompanies.slice(skip, skip + limitNumber);
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     totalCompanies,
     totalPages,
     currentPage: pageNumber,
@@ -109,12 +109,12 @@ exports.getCompaniesById = catchAsync(async (req, res, next) => {
 
   const company = await Company.findById(id)
     .populate({
-      path: "reviews",
+      path: 'reviews',
     })
     .lean();
 
   if (!company) {
-    return next(new AppError("Company not found", 404));
+    return next(new AppError('Company not found', 404));
   }
 
   const { negativeCount, totalReviews } = company;
@@ -129,8 +129,8 @@ exports.getCompaniesById = catchAsync(async (req, res, next) => {
     complaintRate,
   };
   res.status(200).json({
-    status: "success",
-    message: "Company fetched successfully",
+    status: 'success',
+    message: 'Company fetched successfully',
     data: {
       company: companyWithStats,
     },

@@ -1,19 +1,19 @@
-const catchAsync = require("../utils/catchAsync");
-const Story = require("../model/reviewModel");
-const AppError = require("../utils/appError");
-const Company = require("../model/companyModel");
-const crypto = require("crypto");
+const catchAsync = require('../utils/catchAsync');
+const Story = require('../model/reviewModel');
+const AppError = require('../utils/appError');
+const Company = require('../model/companyModel');
+const crypto = require('crypto');
 
 function generateAnonymousId() {
-  return "Anon-" + crypto.randomBytes(3).toString;
+  return 'Anon-' + crypto.randomBytes(3).toString('hex');
 }
 
-exports.getALlReviews = catchAsync(async (req, res, next) => {
+exports.getAllReviews = catchAsync(async (req, res, next) => {
   const {
-    companyName = "",
-    vibe = "",
-    search = "",
-    sort = "newest",
+    companyName = '',
+    vibe = '',
+    search = '',
+    sort = 'newest',
     page = 1,
     limit = 6,
   } = req.query;
@@ -21,7 +21,7 @@ exports.getALlReviews = catchAsync(async (req, res, next) => {
   const filter = {};
 
   if (companyName) {
-    filter.companyName = { $regex: companyName, $options: "i" };
+    filter.companyName = { $regex: companyName, $options: 'i' };
   }
 
   if (vibe) {
@@ -29,10 +29,10 @@ exports.getALlReviews = catchAsync(async (req, res, next) => {
   }
 
   if (search) {
-    filter.title = { $regex: search, $options: "i" };
+    filter.title = { $regex: search, $options: 'i' };
   }
 
-  const sortOption = sort === "oldest" ? "createdAt" : "-createdAt";
+  const sortOption = sort === 'oldest' ? 'createdAt' : '-createdAt';
 
   const skip = (page - 1) * limit;
 
@@ -42,7 +42,7 @@ exports.getALlReviews = catchAsync(async (req, res, next) => {
   ]);
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     results: reviews.length,
     total,
     page: Number(page),
@@ -56,13 +56,13 @@ exports.createStory = catchAsync(async (req, res, next) => {
     req.body;
 
   if (!isAnonymous && !name) {
-    return next(new AppError("Name is required if not anonymous", 400));
+    return next(new AppError('Name is required if not anonymous', 400));
   }
 
   const company = await Company.findOne({ name: companyName });
 
   if (!company) {
-    return next(new AppError("Please select a valid company", 400));
+    return next(new AppError('Please select a valid company', 400));
   }
 
   const newStory = await Story.create({
@@ -81,15 +81,21 @@ exports.createStory = catchAsync(async (req, res, next) => {
     $inc: { totalReviews: 1 },
   };
 
-  if (vibe === "positive") update.$inc.positiveCount = 1;
-  if (vibe === "negative") update.$inc.negativeCount = 1;
-  if (vibe === "neutral") update.$inc.neutralCount = 1;
+  if (vibe === 'positive') {
+    update.$inc.positiveCount = 1;
+  }
+  if (vibe === 'negative') {
+    update.$inc.negativeCount = 1;
+  }
+  if (vibe === 'neutral') {
+    update.$inc.neutralCount = 1;
+  }
 
   await Company.findByIdAndUpdate(company._id, update);
 
   res.status(201).json({
-    status: "success",
-    message: "Story submitted successfully",
+    status: 'success',
+    message: 'Story submitted successfully',
     data: { story: newStory },
   });
 });

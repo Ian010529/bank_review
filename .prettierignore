@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+*.min.js
+*.min.css
+
+# Logs
+*.log
+
+# Environment files
+*.env
+.env.*
+config.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated files
+next-env.d.ts
+.vercel/
+coverage/
+
+# Lock files
+pnpm-lock.yaml
+
